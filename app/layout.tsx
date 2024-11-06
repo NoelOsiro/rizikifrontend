@@ -2,7 +2,7 @@
 import { ThemeProvider } from "next-themes";
 import { Poppins } from 'next/font/google';
 import { Header } from '@/components/Header/index'
-import { Sidebar } from '@/components/sidebar'
+import { Sidebar } from '@/components/Sidebar/index'
 import "flatpickr/dist/flatpickr.min.css";
 import './globals.css'
 
