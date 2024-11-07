@@ -37,14 +37,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex h-screen bg-background">
-            <Sidebar />
-            <div className="flex flex-col flex-1">
-              <Header />
-              {children}
-            </div>
-          </div>
-
+          {children}
         </ThemeProvider>
       </body>
     </html>

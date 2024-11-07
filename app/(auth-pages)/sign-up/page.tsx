@@ -5,7 +5,7 @@ import { SubmitButton } from "@/components/submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
-import { SmtpMessage } from "../smtp-message"
+import AuthLayout from '@/components/Layouts/AuthLayout'
 
 export default async function Signup(props: {
   searchParams: Promise<Message>
@@ -20,22 +20,8 @@ export default async function Signup(props: {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
-      <div className="hidden md:flex md:w-1/2 bg-primary justify-center items-center p-6">
-        <div className="text-center">
-          <Image
-            src="/placeholder.svg?height=200&width=200"
-            alt="Riziki Flour Millers Logo"
-            width={200}
-            height={200}
-            className="mx-auto mb-4"
-          />
-          <h1 className="text-4xl font-bold text-white mb-2">Riziki Flour Millers</h1>
-          <p className="text-xl text-white">Quality flour for your daily needs</p>
-        </div>
-      </div>
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6">
-        <form className="w-full max-w-md">
+    <AuthLayout>
+      <form className="w-full max-w-md">
           <h2 className="text-3xl font-bold mb-2">Sign up</h2>
           <p className="text-sm text-muted-foreground mb-6">
             Already have an account?{" "}
@@ -65,8 +51,6 @@ export default async function Signup(props: {
             <FormMessage message={searchParams} />
           </div>
         </form>
-      </div>
-      <SmtpMessage />
-    </div>
+    </AuthLayout>
   )
 }
