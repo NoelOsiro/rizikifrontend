@@ -1,11 +1,15 @@
+import DefaultLayout from '@/components/Layouts/DefaultLayout'
+import OrderPage from '@/components/Order'
 import React from 'react'
 
 type Props = {}
 
-const OrdersPage = (props: Props) => {
+const Orders = (props: Props) => {
   return (
-    <div>OrdersPage</div>
+    <DefaultLayout>
+      <OrderPage />
+    </DefaultLayout>
   )
 }
 
-export default OrdersPage
+export default Orders
