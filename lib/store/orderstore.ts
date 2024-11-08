@@ -1,5 +1,5 @@
-// orderStore.ts
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface OrderStats {
   totalOrders: number
@@ -21,7 +21,7 @@ interface OrderTrend {
   revenue: number
 }
 
-interface Order {
+export interface Order {
   id: string
   customer: string
   total: string
@@ -34,42 +34,109 @@ interface OrderStore {
   orderStatus: OrderStatus
   orderTrends: OrderTrend[]
   recentOrders: Order[]
+  isLoading: boolean
+  error: string | null
+  fetchOrders: () => Promise<void>
+  addOrder: (order: Omit<Order, 'id'>) => Promise<void>
+  updateOrder: (id: string, updates: Partial<Order>) => Promise<void>
+  deleteOrder: (id: string) => Promise<void>
   setOrderStats: (stats: OrderStats) => void
   setOrderStatus: (status: OrderStatus) => void
   setOrderTrends: (trends: OrderTrend[]) => void
   setRecentOrders: (orders: Order[]) => void
 }
 
-export const useOrderStore = create<OrderStore>((set) => ({
-  orderStats: {
-    totalOrders: 1234,
-    revenue: 45678,
-    avgOrderValue: 37.01,
-    pendingOrders: 23,
-  },
-  orderStatus: {
-    completed: 400,
-    processing: 300,
-    pending: 200,
-    cancelled: 100,
-  },
-  orderTrends: [
-    { name: 'Jan', orders: 400, revenue: 24000 },
-    { name: 'Feb', orders: 300, revenue: 18000 },
-    { name: 'Mar', orders: 200, revenue: 12000 },
-    { name: 'Apr', orders: 278, revenue: 16680 },
-    { name: 'May', orders: 189, revenue: 11340 },
-    { name: 'Jun', orders: 239, revenue: 14340 },
-    { name: 'Jul', orders: 349, revenue: 20940 },
-  ],
-  recentOrders: [
-    { id: 'ORD001', customer: 'John Doe', total: '$156.00', status: 'Completed', date: '2023-06-15' },
-    { id: 'ORD002', customer: 'Jane Smith', total: '$89.50', status: 'Processing', date: '2023-06-14' },
-    { id: 'ORD003', customer: 'Bob Johnson', total: '$210.75', status: 'Pending', date: '2023-06-13' },
-    { id: 'ORD004', customer: 'Alice Brown', total: '$45.25', status: 'Completed', date: '2023-06-12' },
-  ],
-  setOrderStats: (stats) => set({ orderStats: stats }),
-  setOrderStatus: (status) => set({ orderStatus: status }),
-  setOrderTrends: (trends) => set({ orderTrends: trends }),
-  setRecentOrders: (orders) => set({ recentOrders: orders }),
-}))
+export const useOrderStore = create<OrderStore>()(
+  persist(
+    (set, get) => ({
+      orderStats: {
+        totalOrders: 0,
+        revenue: 0,
+        avgOrderValue: 0,
+        pendingOrders: 0,
+      },
+      orderStatus: {
+        completed: 0,
+        processing: 0,
+        pending: 0,
+        cancelled: 0,
+      },
+      orderTrends: [],
+      recentOrders: [],
+      isLoading: false,
+      error: null,
+      fetchOrders: async () => {
+        set({ isLoading: true, error: null })
+        try {
+          const response = await fetch('/api/orders')
+          if (!response.ok) throw new Error('Failed to fetch orders')
+          const data = await response.json()
+          set({ recentOrders: data, isLoading: false })
+        } catch (error) {
+          set({ error: (error as Error).message, isLoading: false })
+        }
+      },
+      addOrder: async (order) => {
+        set({ isLoading: true, error: null })
+        try {
+          const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(order),
+          })
+          if (!response.ok) throw new Error('Failed to add order')
+          const newOrder = await response.json()
+          set(state => ({
+            recentOrders: [...state.recentOrders, newOrder],
+            isLoading: false
+          }))
+        } catch (error) {
+          set({ error: (error as Error).message, isLoading: false })
+        }
+      },
+      updateOrder: async (id, updates) => {
+        set({ isLoading: true, error: null })
+        try {
+          const response = await fetch(`/api/orders/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updates),
+          })
+          if (!response.ok) throw new Error('Failed to update order')
+          const updatedOrder = await response.json()
+          set(state => ({
+            recentOrders: state.recentOrders.map(order => 
+              order.id === id ? updatedOrder : order
+            ),
+            isLoading: false
+          }))
+        } catch (error) {
+          set({ error: (error as Error).message, isLoading: false })
+        }
+      },
+      deleteOrder: async (id) => {
+        set({ isLoading: true, error: null })
+        try {
+          const response = await fetch(`/api/orders/${id}`, {
+            method: 'DELETE',
+          })
+          if (!response.ok) throw new Error('Failed to delete order')
+          set(state => ({
+            recentOrders: state.recentOrders.filter(order => order.id !== id),
+            isLoading: false
+          }))
+        } catch (error) {
+          set({ error: (error as Error).message, isLoading: false })
+        }
+      },
+      setOrderStats: (stats) => set({ orderStats: stats }),
+      setOrderStatus: (status) => set({ orderStatus: status }),
+      setOrderTrends: (trends) => set({ orderTrends: trends }),
+      setRecentOrders: (orders) => set({ recentOrders: orders }),
+    }),
+    {
+      name: 'order-storage',
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+)

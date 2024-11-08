@@ -7,22 +7,21 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useCargoStore } from '@/lib/store/cargoStore'
+import { toast } from '@/hooks/use-toast'
 
 interface EditCargoFormProps {
   cargoId?: string
 }
 
 export const EditCargoForm: React.FC<EditCargoFormProps> = ({ cargoId }) => {
-  const { getCargoItem, addCargoItem, updateCargoItem } = useCargoStore()
+  const { getCargoItem, addCargoItem, updateCargoItem, isLoading, error } = useCargoStore()
   const [cargo, setCargo] = useState<{
-    id: string
-    name: string
-    weight: number
-    type: string
-    status: 'in-stock' | 'in-transit' | 'delivered'
-    month: string
+    name: string;
+    weight: number;
+    type: string;
+    status: 'in-stock' | 'in-transit' | 'delivered';
+    month: string;
   }>({
-    id: '',
     name: '',
     weight: 0,
     type: '',
@@ -41,21 +40,31 @@ export const EditCargoForm: React.FC<EditCargoFormProps> = ({ cargoId }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setCargo(prev => ({ ...prev, [name]: value }))
+    setCargo(prev => ({ ...prev, [name]: name === 'weight' ? parseFloat(value) : value }))
   }
 
   const handleSelectChange = (name: string, value: string) => {
     setCargo(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (cargoId) {
-      updateCargoItem(cargoId, cargo)
-    } else {
-      addCargoItem({ ...cargo, id: Date.now().toString() })
+    try {
+      if (cargoId) {
+        await updateCargoItem(cargoId, cargo)
+        toast({ title: "Cargo updated successfully" })
+      } else {
+        await addCargoItem(cargo)
+        toast({ title: "Cargo added successfully" })
+      }
+      // Reset form or redirect
+    } catch (error) {
+      toast({ title: "Error", description: (error as Error).message, variant: "destructive" })
     }
-    // Reset form or redirect
+  }
+
+  if (error) {
+    toast({ title: "Error", description: error, variant: "destructive" })
   }
 
   return (
@@ -103,7 +112,9 @@ export const EditCargoForm: React.FC<EditCargoFormProps> = ({ cargoId }) => {
             <Label htmlFor="month">Month</Label>
             <Input id="month" name="month" value={cargo.month} onChange={handleChange} required />
           </div>
-          <Button type="submit">{cargoId ? 'Update Cargo' : 'Add Cargo'}</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? 'Loading...' : (cargoId ? 'Update Cargo' : 'Add Cargo')}
+          </Button>
         </form>
       </CardContent>
     </Card>

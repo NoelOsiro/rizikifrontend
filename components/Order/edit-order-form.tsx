@@ -7,16 +7,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useOrderStore } from '@/lib/store/orderstore'
+import { toast } from '@/hooks/use-toast'
+import { Order, useOrderStore } from '@/lib/store/orderstore'
+
 
 interface EditOrderFormProps {
   orderId?: string
 }
 
 export const EditOrderForm: React.FC<EditOrderFormProps> = ({ orderId }) => {
-  const { recentOrders, setRecentOrders } = useOrderStore()
-  const [order, setOrder] = useState({
-    id: '',
+  const { recentOrders, addOrder, updateOrder, isLoading, error } = useOrderStore()
+  const [order, setOrder] = useState<Omit<Order, 'id'>>({
     customer: '',
     total: '',
     status: '',
@@ -41,14 +42,24 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({ orderId }) => {
     setOrder(prev => ({ ...prev, status: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (orderId) {
-      setRecentOrders(recentOrders.map(o => o.id === orderId ? order : o))
-    } else {
-      setRecentOrders([...recentOrders, { ...order, id: Date.now().toString() }])
+    try {
+      if (orderId) {
+        await updateOrder(orderId, order)
+        toast({ title: "Order updated successfully" })
+      } else {
+        await addOrder(order)
+        toast({ title: "Order added successfully" })
+      }
+      // Reset form or redirect
+    } catch (error) {
+      toast({ title: "Error", description: (error as Error).message, variant: "destructive" })
     }
-    // Reset form or redirect
+  }
+
+  if (error) {
+    toast({ title: "Error", description: error, variant: "destructive" })
   }
 
   return (
@@ -84,7 +95,9 @@ export const EditOrderForm: React.FC<EditOrderFormProps> = ({ orderId }) => {
             <Label htmlFor="date">Date</Label>
             <Input id="date" name="date" type="date" value={order.date} onChange={handleChange} required />
           </div>
-          <Button type="submit">{orderId ? 'Update Order' : 'Add Order'}</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? 'Loading...' : (orderId ? 'Update Order' : 'Add Order')}
+          </Button>
         </form>
       </CardContent>
     </Card>
