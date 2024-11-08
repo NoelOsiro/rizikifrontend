@@ -1,15 +1,13 @@
+"use client";
+import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-
-const recentOrders = [
-  { id: 'ORD001', customer: 'John Doe', total: '$156.00', status: 'Completed', date: '2023-06-15' },
-  { id: 'ORD002', customer: 'Jane Smith', total: '$89.50', status: 'Processing', date: '2023-06-14' },
-  { id: 'ORD003', customer: 'Bob Johnson', total: '$210.75', status: 'Pending', date: '2023-06-13' },
-  { id: 'ORD004', customer: 'Alice Brown', total: '$45.25', status: 'Completed', date: '2023-06-12' },
-]
+import { useOrderStore } from '@/lib/store/orderstore'
 
 export const RecentOrders = () => {
+  const { recentOrders } = useOrderStore()
+
   return (
     <Card>
       <CardHeader>

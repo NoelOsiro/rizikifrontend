@@ -1,37 +1,24 @@
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import Link from "next/link";
+'use client';
 import DashBoardCard from "./DashboardCard";
 import RecentSipmentsTable from "./RecentSipmentsTable";
 import { BarGraph } from "./bar-graph";
 import { AreaGraph } from "./area-graph";
 import { PieGraph } from "./pie-graph";
+import { useShipmentStore } from "@/lib/store/shipmentstore";
 
-// Define card and shipment data as arrays
+export function Dashboard() {
+  const { shipments,activeShipments } = useShipmentStore();
+  // Define card and shipment data as arrays
 const cardData = [
   {
     title: "Total Shipments",
-    value: "1,234",
+    value: shipments.length.toString(),
     percentageChange: 20.1,
   },
   {
     title: "Active Shipments",
-    value: "56",
+    value: activeShipments()?.length.toString() || "0",
     percentageChange: 12.5,
   },
   {
@@ -45,13 +32,6 @@ const cardData = [
     description: "Based on 1,000+ reviews",
   },
 ];
-
-const shipments = [
-  { id: "SH12345", status: "In Transit", destination: "Nairobi, Kenya" },
-  { id: "SH12346", status: "Delivered", destination: "Mombasa, Kenya" },
-  { id: "SH12347", status: "Processing", destination: "Kisumu, Kenya" },
-];
-export function Dashboard() {
 
   // Function to style percentage change based on positive/negative value
   const formatPercentage = (value: number) => {
@@ -86,8 +66,7 @@ export function Dashboard() {
               </div>
               <div className="col-span-4">
                 <AreaGraph />
-              </div>
-              
+              </div>           
             </div>
     </main>
   );

@@ -5,14 +5,8 @@ import React, { useState, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { ShipmentList } from '@/components/Shipment/shipment-list'
 import { ShipmentSearch } from '@/components/Shipment/shipment-search'
-
-interface Shipment {
-  id: string
-  lat: number
-  lng: number
-  status: string
-  destination: string
-}
+import { Shipment } from '@/lib/store/shipmentstore'
+import { CreateShipmentForm } from './create-shipment-form'
 
 const ShipmentPage = () => {
   const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(null)
@@ -44,8 +38,12 @@ const ShipmentPage = () => {
         </div>
 
         {/* ShipmentMap takes up the whole row */}
-        <div className="col-span-12">
+        <div className="col-span-12 md:col-span-6 lg:col-span-6">
           <ShipmentMap selectedShipment={selectedShipment} />
+        </div>
+        {/* ShipmentMap takes up the whole row */}
+        <div className="col-span-12 md:col-span-6 lg:col-span-6">
+          <CreateShipmentForm />
         </div>
       </div>
     </main>

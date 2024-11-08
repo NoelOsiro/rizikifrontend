@@ -4,12 +4,8 @@ import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui/card";
 import { TableHeader, TableRow, TableHead, TableBody, TableCell, Table } from "../ui/table";
 import { Button } from "../ui/button";
+import { Shipment } from "@/lib/store/shipmentstore";
 
-interface Shipment {
-    id: string;
-    status: string;
-    destination: string;
-    }
 type Props = {
     shipments: Shipment[];
     }

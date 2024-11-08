@@ -1,26 +1,28 @@
+"use client";
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-
-interface Vehicle {
-  id: string;
-  status: string;
-  location: string;
-  lat?: number; 
-  lng?: number;
-}
+import { useVehicleStore, Vehicle } from '@/lib/store/vehicleStore';
+ // Adjust path as necessary
 
 interface VehicleSearchProps {
   onSelect: (vehicle: Vehicle) => void;
 }
 
 export const VehicleSearch: React.FC<VehicleSearchProps> = ({ onSelect }) => {
+  const getVehicle = useVehicleStore((state) => state.getVehicle)
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const vehicleId = (e.target as HTMLFormElement).vehicleId.value
-    // In a real application, you would fetch the vehicle data here
-    onSelect({ id: vehicleId, lat: 0.5141, lng: 35.2728, status: 'In Transit', location: 'Unknown' })
+    const vehicle = getVehicle(vehicleId)
+
+    if (vehicle) {
+      onSelect(vehicle)
+    } else {
+      alert(`Vehicle with ID ${vehicleId} not found`)
+    }
   }
 
   return (

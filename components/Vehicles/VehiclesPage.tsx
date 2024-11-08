@@ -4,13 +4,8 @@ import React, { useState } from 'react'
 import { VehicleMap } from '@/components/Vehicles/vehicle-map'
 import { VehicleList } from '@/components/Vehicles/vehicle-list'
 import { VehicleSearch } from '@/components/Vehicles/vehicle-search'
-interface Vehicle {
-  id: string;
-  status: string;
-  location: string;
-  lat?: number; 
-  lng?: number;
-}
+import { Vehicle } from '@/lib/store/vehicleStore'
+
 
 const VehiclesPage = () => {
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle|null>(null)

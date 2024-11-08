@@ -6,15 +6,9 @@ import 'leaflet/dist/leaflet.css'
 import "leaflet-defaulticon-compatibility"
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Shipment } from '@/lib/store/shipmentstore'
 
 
-interface Shipment {
-  id: string;
-  lat: number;
-  lng: number;
-  status: string;
-  destination: string;
-}
 
 type Props = {
   selectedShipment: Shipment | null;

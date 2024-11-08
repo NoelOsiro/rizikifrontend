@@ -3,6 +3,7 @@ import { CargoOverview } from '@/components/Cargo/cargo-overview'
 import { CargoDistribution } from '@/components/Cargo/cargo-distribution'
 import { RecentShipments } from '@/components/Cargo/RecentShipments'
 import { CargoTrends } from '@/components/Cargo/cargo-trends'
+import { EditCargoForm } from './edit-cargo-form'
 
 const CargoPage = () => {
   return (
@@ -17,6 +18,9 @@ const CargoPage = () => {
       </div>
       <div className="mt-6">
         <CargoTrends />
+      </div>
+      <div className="mt-6">
+        <EditCargoForm/>
       </div>
     </main>
   )

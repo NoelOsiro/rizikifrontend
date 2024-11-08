@@ -1,18 +1,13 @@
-"use client";
+'use client'
+import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { useOrderStore } from '@/lib/store/orderstore'
 
-const data = [
-  { name: 'Jan', orders: 400, revenue: 24000 },
-  { name: 'Feb', orders: 300, revenue: 18000 },
-  { name: 'Mar', orders: 200, revenue: 12000 },
-  { name: 'Apr', orders: 278, revenue: 16680 },
-  { name: 'May', orders: 189, revenue: 11340 },
-  { name: 'Jun', orders: 239, revenue: 14340 },
-  { name: 'Jul', orders: 349, revenue: 20940 },
-]
 
 export const OrderTrends = () => {
+  const { orderTrends } = useOrderStore()
+
   return (
     <Card>
       <CardHeader>
@@ -21,7 +16,7 @@ export const OrderTrends = () => {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data}>
+          <LineChart data={orderTrends}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis yAxisId="left" />

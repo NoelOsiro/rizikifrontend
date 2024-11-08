@@ -2,20 +2,26 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Shipment, useShipmentStore } from '@/lib/store/shipmentstore';
+// Import the Zustand store
 
 interface ShipmentSearchProps {
-  onSelect: (shipment: { id: string, lat: number, lng: number, status: string,destination: string; }) => void;
+  onSelect: (shipment: Shipment) => void;
 }
 
 export const ShipmentSearch: React.FC<ShipmentSearchProps> = ({ onSelect }) => {
+  const getShipment = useShipmentStore((state) => state.getShipment) // Get the `getShipment` function from the store
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const shipmentId = (e.target as HTMLFormElement).shipmentId.value
-    // In a real application, you would fetch the shipment data here
-    onSelect({
-      id: shipmentId, lat: 0.5141, lng: 35.2728, status: 'In Transit',
-      destination: 'Kilifi'
-    })
+    const shipment = getShipment(shipmentId) // Fetch shipment from the store
+
+    if (shipment) {
+      onSelect(shipment) // If shipment is found, pass it to `onSelect`
+    } else {
+      alert('Shipment not found') // Handle case where shipment is not found
+    }
   }
 
   return (

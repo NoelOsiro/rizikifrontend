@@ -4,8 +4,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
+import { useAppStore } from "@/lib/store/userStore"
 
 export const SystemSettings = () => {
+  const { theme, setTheme } = useAppStore()
+
   return (
     <Card>
       <CardHeader>
@@ -43,7 +46,11 @@ export const SystemSettings = () => {
         </div>
         <div className="flex items-center justify-between">
           <Label htmlFor="dark-mode">Dark Mode</Label>
-          <Switch id="dark-mode" />
+          <Switch 
+            id="dark-mode" 
+            checked={theme === 'dark'}
+            onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+          />
         </div>
         <div className="flex items-center justify-between">
           <Label htmlFor="analytics">Enable Analytics</Label>

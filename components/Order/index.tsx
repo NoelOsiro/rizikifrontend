@@ -3,6 +3,7 @@ import { OrderOverview } from '@/components/Order/order-overview'
 import { RecentOrders } from '@/components/Order/recent-orders'
 import { OrderStatusDistribution } from '@/components/Order/order-status-distribution'
 import { OrderTrends } from '@/components/Order/order-trends'
+import { EditOrderForm } from './edit-order-form'
 
 const OrderPage = () => {
   return (
@@ -17,6 +18,9 @@ const OrderPage = () => {
       </div>
       <div className="mt-6">
         <OrderTrends />
+      </div>
+      <div className="mt-6">
+        <EditOrderForm/>
       </div>
     </main>
   )

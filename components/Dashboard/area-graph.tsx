@@ -18,23 +18,27 @@ import {
   ChartTooltipContent
 } from '@/components/ui/chart';
 const chartData = [
-  { month: 'January', malindi: 186, kilifi: 80 },
-  { month: 'February', malindi: 305, kilifi: 200 },
-  { month: 'March', malindi: 237, kilifi: 120 },
-  { month: 'April', malindi: 73, kilifi: 190 },
-  { month: 'May', malindi: 209, kilifi: 130 },
-  { month: 'June', malindi: 214, kilifi: 140 }
+  { month: 'January', mombasa: 186, kilifi: 80, kwale: 100 },
+  { month: 'February', mombasa: 305, kilifi: 200, kwale: 150 },
+  { month: 'March', mombasa: 237, kilifi: 120, kwale: 180 },
+  { month: 'April', mombasa: 73, kilifi: 190, kwale: 120 },
+  { month: 'May', mombasa: 209, kilifi: 130, kwale: 140 },
+  { month: 'June', mombasa: 214, kilifi: 140, kwale: 160 }
 ];
 
 const chartConfig = {
-  malindi: {
-    label: 'Malindi',
+  mombasa: {
+    label: 'Mombasa',
     color: 'hsl(var(--chart-1))'
   },
   kilifi: {
     label: 'Kilifi',
     color: 'hsl(var(--chart-2))'
-  }
+  },
+  kwale: {
+    label: 'Kwale',
+    color: 'hsl(var(--chart-3))'
+  },
 } satisfies ChartConfig;
 
 export function AreaGraph() {
@@ -72,11 +76,11 @@ export function AreaGraph() {
               content={<ChartTooltipContent indicator="dot" />}
             />
             <Area
-              dataKey="malindi"
+              dataKey="mombasa"
               type="natural"
-              fill="var(--color-malindi)"
+              fill="var(--color-mombasa)"
               fillOpacity={0.4}
-              stroke="var(--color-malindi)"
+              stroke="var(--color-mombasa)"
               stackId="a"
             />
             <Area
@@ -85,6 +89,14 @@ export function AreaGraph() {
               fill="var(--color-kilifi)"
               fillOpacity={0.4}
               stroke="var(--color-kilifi)"
+              stackId="a"
+            />
+            <Area
+              dataKey="kwale"
+              type="natural"
+              fill="var(--color-kwale)"
+              fillOpacity={0.4}
+              stroke="var(--color-kwale)"
               stackId="a"
             />
           </AreaChart>

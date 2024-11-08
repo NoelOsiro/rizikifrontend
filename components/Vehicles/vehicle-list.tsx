@@ -1,26 +1,17 @@
+"use client";
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
+import { useVehicleStore, Vehicle } from '@/lib/store/vehicleStore'
 
-const vehicles = [
-  { id: 'V001', status: 'In Transit', location: 'Nairobi', lat: -1.286389, lng: 36.817223 },
-  { id: 'V002', status: 'Idle', location: 'Mombasa', lat: -4.043477, lng: 39.668206 },
-  { id: 'V003', status: 'In Transit', location: 'Kisumu', lat: -0.091702, lng: 34.767956 },
-  { id: 'V004', status: 'Maintenance', location: 'Nakuru', lat: -0.303099, lng: 36.080025 },
-]
-
-interface Vehicle {
-  id: string;
-  status: string;
-  location: string;
-}
 
 interface VehicleListProps {
   onSelect: (vehicle: Vehicle) => void;
 }
 
 export const VehicleList: React.FC<VehicleListProps> = ({ onSelect }) => {
+  const { vehicles} = useVehicleStore()
   return (
     <Card className="mt-6">
       <CardHeader>
