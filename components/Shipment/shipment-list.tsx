@@ -24,7 +24,7 @@ interface ShipmentListProps {
 
 export const ShipmentList: React.FC<ShipmentListProps> = ({ onSelect }) => {
   return (
-    <Card className="mt-6">
+    <Card>
       <CardHeader>
         <CardTitle>Shipment List</CardTitle>
       </CardHeader>

@@ -4,10 +4,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button'
 
 const vehicles = [
-  { id: 'V001', status: 'In Transit', location: 'Nairobi' },
-  { id: 'V002', status: 'Idle', location: 'Mombasa' },
-  { id: 'V003', status: 'In Transit', location: 'Kisumu' },
-  { id: 'V004', status: 'Maintenance', location: 'Nakuru' },
+  { id: 'V001', status: 'In Transit', location: 'Nairobi', lat: -1.286389, lng: 36.817223 },
+  { id: 'V002', status: 'Idle', location: 'Mombasa', lat: -4.043477, lng: 39.668206 },
+  { id: 'V003', status: 'In Transit', location: 'Kisumu', lat: -0.091702, lng: 34.767956 },
+  { id: 'V004', status: 'Maintenance', location: 'Nakuru', lat: -0.303099, lng: 36.080025 },
 ]
 
 interface Vehicle {

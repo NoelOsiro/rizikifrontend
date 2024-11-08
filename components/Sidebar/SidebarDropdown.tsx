@@ -1,35 +1,42 @@
-import React from "react";
+// src/components/SidebarDropdown.tsx
+import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-const SidebarDropdown = ({ item }: any) => {
-  const pathname = usePathname();
+interface SidebarDropdownProps {
+  label: string;
+  icon: React.ElementType;
+  items: { href: string; label: string; icon: React.ElementType }[];
+}
+
+export default function SidebarDropdown({ label, icon: Icon, items }: SidebarDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      <ul className="my-2 flex flex-col gap-1.5 pl-9">
-        {item.map((item: any, index: number) => (
-          <li key={index}>
-            <Link
-              href={item.route}
-              className={`relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out ${
-                pathname === item.route
-                  ? "bg-primary/[.07] text-primary dark:bg-white/10 dark:text-white"
-                  : "text-dark-4 hover:bg-gray-2 hover:text-dark dark:text-gray-5 dark:hover:bg-white/10 dark:hover:text-white"
-              }`}
-            >
-              {item.label}
-              {item.pro && (
-                <span className="absolute right-3.5 top-1/2 -translate-y-1/2 rounded-md bg-primary px-1.5 py-px text-[10px] font-medium leading-[17px] text-white">
-                  Pro
-                </span>
-              )}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-};
+    <div className="space-y-2">
+      <Button
+        variant="ghost"
+        className="w-full justify-start text-foreground"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <Icon className="mr-2 h-4 w-4" />
+        {label}
+        {isOpen ? <ChevronUp className="ml-auto h-4 w-4" /> : <ChevronDown className="ml-auto h-4 w-4" />}
+      </Button>
 
-export default SidebarDropdown;
+      {isOpen && (
+        <div className="ml-6 space-y-1">
+          {items.map((item) => (
+            <Button key={item.href} variant="ghost" asChild className="w-full justify-start text-foreground">
+              <Link href={item.href}>
+                <item.icon className="mr-2 h-4 w-4" />
+                {item.label}
+              </Link>
+            </Button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

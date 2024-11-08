@@ -1,21 +1,25 @@
+// src/components/Sidebar.tsx
 "use client";
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Home, Package, Truck, Settings, Presentation } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Home, Package, Truck, Settings, Presentation, FileText } from "lucide-react";
+import { SidebarItem } from "@/components/Sidebar/SidebarItem";
+import SidebarDropdown from "./SidebarDropdown";
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const router = usePathname();
 
   const navItems = [
     { href: "/", label: "Dashboard", icon: Home },
     { href: "/cargo", label: "Cargo", icon: Package },
     { href: "/orders", label: "Orders", icon: Presentation },
-    { href: "/tracking", label: "Tracking", icon: Truck },
     { href: "/settings", label: "Settings", icon: Settings },
+  ];
+
+  const trackingItems = [
+    { href: "/tracking/shipment", label: "Shipment", icon: FileText },
+    { href: "/tracking/vehicles", label: "Vehicles", icon: Truck },
   ];
 
   return (
@@ -42,27 +46,10 @@ export function Sidebar() {
 
         {/* Navigation Links */}
         <nav className="space-y-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = router === item.href;
-
-            return (
-              <Button
-                key={item.href}
-                variant="ghost"
-                className={`w-full justify-start ${
-                  isActive ? "bg-green-400 text-foreground" : "text-foreground"
-                }`}
-                asChild
-                onClick={() => setIsOpen(false)}
-              >
-                <Link href={item.href}>
-                  <Icon className="mr-2 h-4 w-4" />
-                  {item.label}
-                </Link>
-              </Button>
-            );
-          })}
+          {navItems.map((item) => (
+            <SidebarItem key={item.href} href={item.href} label={item.label} icon={item.icon} />
+          ))}
+          <SidebarDropdown label="Tracking" icon={Truck} items={trackingItems} />
         </nav>
       </aside>
 
