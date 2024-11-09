@@ -24,7 +24,7 @@ export function Header() {
           {user ? (
             <div className="flex items-center space-x-2">
               <Avatar>
-                <AvatarImage src={user.user_metadata.image} alt={user.email} />
+                <AvatarImage src={user.image ?? undefined} alt={'profile picture'} />
                 <AvatarFallback>{user.email?.charAt(0) ?? ''}</AvatarFallback>
               </Avatar>
               <Button variant="ghost" onClick={logout}>Logout</Button>

@@ -2,6 +2,7 @@
 import { ThemeProvider } from "next-themes";
 import { Poppins } from 'next/font/google';
 import './globals.css'
+import {SessionProvider } from 'next-auth/react';
 
 
 const defaultUrl = process.env.VERCEL_URL
@@ -28,13 +29,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppy.className} suppressHydrationWarning={true}>
       <body >
+        
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+          <SessionProvider>
           {children}
+          </SessionProvider>
+          
         </ThemeProvider>
       </body>
     </html>
