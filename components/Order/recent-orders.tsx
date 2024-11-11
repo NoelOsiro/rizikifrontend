@@ -1,12 +1,15 @@
 "use client";
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { useOrderStore } from '@/lib/store/orderstore'
 
 export const RecentOrders = () => {
-  const { recentOrders } = useOrderStore()
+  const { recentOrders,fetchOrders } = useOrderStore()
+  useEffect(() => {
+    fetchOrders()
+  }, [])
 
   return (
     <Card>
@@ -26,18 +29,18 @@ export const RecentOrders = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recentOrders.map((order) => (
+            {Array.isArray(recentOrders) && recentOrders.map((order) => (
               <TableRow key={order.id}>
-                <TableCell>{order.id}</TableCell>
-                <TableCell>{order.customer}</TableCell>
-                <TableCell>{order.total}</TableCell>
-                <TableCell>
-                  <Badge variant={order.status === 'Completed' ? 'default' : 
-                                  order.status === 'Processing' ? 'outline' : 'secondary'}>
-                    {order.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{order.date}</TableCell>
+              <TableCell>{order.id}</TableCell>
+              <TableCell>{order.customer}</TableCell>
+              <TableCell>{order.total}</TableCell>
+              <TableCell>
+                <Badge variant={order.status === 'Completed' ? 'default' : 
+                        order.status === 'Processing' ? 'outline' : 'secondary'}>
+                {order.status}
+                </Badge>
+              </TableCell>
+              <TableCell>{order.date}</TableCell>
               </TableRow>
             ))}
           </TableBody>

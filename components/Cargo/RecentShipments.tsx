@@ -3,11 +3,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { useShipmentStore } from "@/lib/store/shipmentstore"
+import { use, useEffect } from "react";
  // Adjust path to your store file
 
 export const RecentShipments = () => {
-  // Fetch shipments from the store
+  const fetchShipments = useShipmentStore((state) => state.fetchShipments)
   const shipments = useShipmentStore((state) => state.shipments)
+
+  useEffect(() => {
+    fetchShipments()
+  },[fetchShipments])
 
   return (
     <Card>
@@ -26,19 +31,19 @@ export const RecentShipments = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {shipments.map((shipment) => (
+            {Array.isArray(shipments) && shipments.map((shipment) => (
               <TableRow key={shipment.id}>
-                <TableCell>{shipment.id}</TableCell>
-                <TableCell>{shipment.destination}</TableCell>
-                <TableCell>
-                  <Badge variant={
-                    shipment.status === 'delivered' ? 'default' :
-                    shipment.status === 'in-transit' ? 'outline' : 'secondary'
-                  }>
-                    {shipment.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{new Date(shipment.estimatedDelivery).toLocaleDateString()}</TableCell>
+              <TableCell>{shipment.id}</TableCell>
+              <TableCell>{shipment.destination}</TableCell>
+              <TableCell>
+                <Badge variant={
+                shipment.status === 'delivered' ? 'default' :
+                shipment.status === 'in-transit' ? 'outline' : 'secondary'
+                }>
+                {shipment.status}
+                </Badge>
+              </TableCell>
+              <TableCell>{new Date(shipment.estimatedDelivery).toLocaleDateString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>

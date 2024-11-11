@@ -1,12 +1,16 @@
 "use client";
-import React from 'react'
+import React, { use, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ShoppingCart, DollarSign, TrendingUp, Clock } from 'lucide-react'
 import { useOrderStore } from '@/lib/store/orderstore';
 
 
 export const OrderOverview = () => {
-  const { orderStats } = useOrderStore()
+
+  const { orderStats,fetchOrders } = useOrderStore()
+  useEffect(() => {
+    fetchOrders()
+  }, [])
 
   return (
     <Card>

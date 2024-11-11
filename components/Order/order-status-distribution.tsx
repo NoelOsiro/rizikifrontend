@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { use, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts'
 import { useOrderStore } from '@/lib/store/orderstore';
@@ -8,7 +8,10 @@ import { useOrderStore } from '@/lib/store/orderstore';
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
 
 export const OrderStatusDistribution = () => {
-  const { orderStatus } = useOrderStore()
+  const { orderStatus,fetchOrders } = useOrderStore()
+  useEffect(() => {
+    fetchOrders()
+  }, [])
 
   const data = [
     { name: 'Completed', value: orderStatus.completed },

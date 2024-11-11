@@ -4,24 +4,31 @@ import Link from "next/link"
 import { Metadata } from 'next'
 import { cn } from "@/lib/utils"
 import { buttonVariants } from '../ui/button'
+import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
 
 type Props = {}
 
 
 export const metadata: Metadata = {
-    title: "Authentication",
-    description: "Authentication forms built using the components.",
+  title: "Authentication",
+  description: "Authentication forms built using the components.",
+}
+
+const AuthLayout = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const session = await auth()
+  if (session?.user) {
+    redirect('/')
   }
 
-const AuthLayout = ({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) => {
   return (
     <>
 
-<div className="container relative flex  min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="container relative flex  min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           href="/examples/authentication"
           className={cn(
@@ -32,13 +39,13 @@ const AuthLayout = ({
           Login
         </Link>
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-            <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
-            <Image
-                src="https://picsum.photos/800" 
-                alt="Authentication"
-                className='z-0 object-cover'
-                fill
-            />
+          <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
+          <Image
+            src="https://picsum.photos/800"
+            alt="Authentication"
+            className='z-0 object-cover'
+            fill
+          />
           <div className="relative z-20 flex items-center text-lg font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -57,14 +64,7 @@ const AuthLayout = ({
         </div>
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-            <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Create an account
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Enter your email below to create your account
-              </p>
-            </div>
+
             {children}
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
@@ -85,7 +85,7 @@ const AuthLayout = ({
             </p>
           </div>
         </div>
-        </div>
+      </div>
     </>
   )
 }

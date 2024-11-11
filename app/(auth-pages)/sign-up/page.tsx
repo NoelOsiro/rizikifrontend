@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { signUpAction } from "@/app/actions"
 import { FormMessage, Message } from "@/components/form-message"
-import { SubmitButton } from "@/components/submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
@@ -21,11 +20,19 @@ export default async function Signup(props: {
 
   return (
     <AuthLayout>
+      <div className="flex flex-col space-y-2 text-center">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Create an account
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Enter your email below to create your account
+              </p>
+            </div>
       <form className="w-full max-w-md">
           <h2 className="text-3xl font-bold mb-2">Sign up</h2>
           <p className="text-sm text-muted-foreground mb-6">
             Already have an account?{" "}
-            <Link className="text-primary font-medium hover:underline" href="/sign-in">
+            <Link className="text-primary font-medium hover:underline" href="/login">
               Sign in
             </Link>
           </p>
@@ -45,9 +52,6 @@ export default async function Signup(props: {
                 required
               />
             </div>
-            <SubmitButton formAction={signUpAction} pendingText="Signing up...">
-              Sign up
-            </SubmitButton>
             <FormMessage message={searchParams} />
           </div>
         </form>

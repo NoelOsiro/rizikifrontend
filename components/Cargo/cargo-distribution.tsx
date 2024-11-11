@@ -9,8 +9,11 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
 export const CargoDistribution = () => {
   const cargoItems = useCargoStore((state) => state.cargoItems)
 
+  // Safeguard in case cargoItems is not an array
+  const safeCargoItems = Array.isArray(cargoItems) ? cargoItems : []
+
   // Aggregate cargo data by type
-  const cargoDistribution = cargoItems.reduce((acc, { type, weight }) => {
+  const cargoDistribution = safeCargoItems.reduce((acc, { type, weight }) => {
     acc[type] = (acc[type] || 0) + weight
     return acc
   }, {} as Record<string, number>)

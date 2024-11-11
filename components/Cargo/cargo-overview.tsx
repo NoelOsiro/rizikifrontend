@@ -2,15 +2,25 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Package, Truck, Clock, CheckCircle } from 'lucide-react'
 import { useCargoStore } from '@/lib/store/cargoStore'
+import { useEffect } from "react";
 
 export const CargoOverview = () => {
+  const fetchCargoItems = useCargoStore((state) => state.fetchCargoItems)
   const cargoItems = useCargoStore((state) => state.cargoItems)
 
+  // Fetch cargo items on component mount
+  useEffect(() => {
+    fetchCargoItems()
+  }, [fetchCargoItems])
+
+  // Safeguard in case cargoItems is not an array
+  const safeCargoItems = Array.isArray(cargoItems) ? cargoItems : []
+
   // Calculate metrics based on cargo status
-  const totalCargo = cargoItems.length
-  const inTransit = cargoItems.filter(item => item.status === 'in-transit').length
-  const pending = cargoItems.filter(item => item.status === 'in-stock').length
-  const delivered = cargoItems.filter(item => item.status === 'delivered').length
+  const totalCargo = safeCargoItems.length
+  const inTransit = safeCargoItems.filter(item => item.status === 'in-transit').length
+  const pending = safeCargoItems.filter(item => item.status === 'in-stock').length
+  const delivered = safeCargoItems.filter(item => item.status === 'delivered').length
 
   return (
     <Card>
